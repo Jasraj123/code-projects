@@ -1,12 +1,21 @@
 let expression = '';
 
-function appendNumber(number) {
-  expression += number;
-  document.getElementById('result').value = expression;
+function handleButtonClick(event) {
+  const buttonValue = event.target.textContent;
+  
+  if (buttonValue === '=') {
+    calculate();
+  } else {
+    if (buttonValue === 'C') {
+      clearResult();
+    } else {
+      appendCharacter(buttonValue);
+    }
+  }
 }
 
-function appendOperator(operator) {
-  expression += operator;
+function appendCharacter(character) {
+  expression += character;
   document.getElementById('result').value = expression;
 }
 
@@ -17,7 +26,7 @@ function clearResult() {
 
 function calculate() {
   try {
-    const result = eval(expression);
+    const result = eval(expression));
     document.getElementById('result').value = result;
     expression = '';
   } catch (error) {
