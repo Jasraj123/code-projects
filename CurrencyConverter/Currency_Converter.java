@@ -1,68 +1,55 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import java.util.Scanner;
 
-public class Currency_Converter extends JFrame {
-    private JLabel amountLabel, fromLabel, toLabel, resultLabel;
-    private JTextField amountField;
-    private JComboBox<String> fromComboBox, toComboBox;
-    private JButton convertButton;
-    private DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
-
-    private final String[] currencies = {"USD", "EUR", "JPY", "GBP", "CAD", "AUD", "CHF", "CNY","INR"};
+public class Currency_Converter {
+    private final String[] currencies = {"USD", "EUR", "JPY", "GBP", "CAD", "AUD", "CHF", "CNY", "INR"};
     private final double[] exchangeRates = {1.00, 0.88, 110.50, 0.75, 1.30, 1.35, 0.95, 6.80, 90.00};
+    private final DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
 
-     public static void main(String[] args) {
-        new Currency_Converter(); }
+    public static void main(String[] args) {
+        new Currency_Converter().start();
+    }
 
-    public Currency_Converter() {
-        setTitle("Currency Converter");
-        setLayout(new GridLayout(4, 2));
+    public void start() {
+        Scanner scanner = new Scanner(System.in);
 
-        amountLabel = new JLabel("Amount:");
-        add(amountLabel);
+        System.out.println("Welcome!");
 
-        amountField = new JTextField();
-        add(amountField);
+        while (true) {
+            System.out.print("Enter the amount: ");
+            double amount = readDouble(scanner);
 
-        fromLabel = new JLabel("From:");
-        add(fromLabel);
+            System.out.print("From (e.g., USD): ");
+            String fromCurrency = scanner.next().toUpperCase();
 
-        fromComboBox = new JComboBox<>(currencies);
-        add(fromComboBox);
+            System.out.print("To (e.g., EUR): ");
+            String toCurrency = scanner.next().toUpperCase();
 
-        toLabel = new JLabel("To:");
-        add(toLabel);
+            double result = convert(amount, fromCurrency, toCurrency);
+            System.out.println("Converted amount: " + decimalFormat.format(result) + " " + toCurrency);
 
-        toComboBox = new JComboBox<>(currencies);
-        add(toComboBox);
-
-        convertButton = new JButton("Convert");
-        add(convertButton);
-
-        resultLabel = new JLabel();
-        add(resultLabel);
-
-        convertButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    double amount = Double.parseDouble(amountField.getText());
-                    String fromCurrency = (String) fromComboBox.getSelectedItem();
-                    String toCurrency = (String) toComboBox.getSelectedItem();
-                    double exchangeRate = exchangeRates[getIndex(toCurrency)] / exchangeRates[getIndex(fromCurrency)];
-                    double result = amount * exchangeRate;
-                    resultLabel.setText(decimalFormat.format(result) + " " + toCurrency);
-                } catch (Exception ex) {
-                    resultLabel.setText("Invalid input");
-                }
+            System.out.print("Want to convert another amount? (yes/no): ");
+            String response = scanner.next().toLowerCase();
+            if (response.equals("no")) {
+                System.out.println("Thank you for using Currency Converter. Goodbye!");
+                break;
             }
-        });
+        }
 
-        setSize(300, 200);
-        setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        scanner.close();
+    }
+
+    private double readDouble(Scanner scanner) {
+        while (!scanner.hasNextDouble()) {
+            System.out.print("Invalid input. Please enter a valid number: ");
+            scanner.next(); 
+        }
+        return scanner.nextDouble();
+    }
+
+    private double convert(double amount, String fromCurrency, String toCurrency) {
+        double exchangeRate = exchangeRates[getIndex(toCurrency)] / exchangeRates[getIndex(fromCurrency)];
+        return amount * exchangeRate;
     }
 
     private int getIndex(String currency) {
