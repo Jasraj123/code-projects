@@ -1,3 +1,3 @@
-# code-projects
+# Welcome to My GitHub Account!
 
-Welcome to my Github account! Here I make different code projects which you can see in the other Branches :)
+👋 Hello, fellow coders! I'm Jasraj Singh and this is my space for creating and sharing some coding projects I have learned. Explore the folders to discover the projects. Enjoy :)
